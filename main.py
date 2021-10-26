@@ -12,6 +12,7 @@ if action == 'help':
     Type \"info\" for current price and high + low
     Type \"live\" for live updates
     Type \"help\" for help (duh)
+    Made by ItCameFr0mMars
     ''')
 if action == 'info':
     try:    
