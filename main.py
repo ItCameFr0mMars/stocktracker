@@ -28,13 +28,10 @@ if action == 'live':
         message = eval(message)
         global prevprice
         for i in range(int(len(message['data']))):
-            now = datetime.now()
-            current_time = now.strftime("%H:%M:%S")    
-            currentprice = roundfun(message['data'][i]['p'])
-            print("Trade recieved at "+str(current_time))
+            print("Trade recieved at "+str((datetime.now()).strftime("%H:%M:%S")))
             print("Price is now "+str(roundfun(message['data'][i]['p'])))
-            print("Price changed "+str(roundfun(currentprice-prevprice)))
-            prevprice = currentprice
+            print("Price changed "+str(roundfun((roundfun(message['data'][i]['p']))-prevprice)))
+            prevprice = roundfun(message['data'][i]['p'])
             print('\r')
 
     def on_error(ws, error):
@@ -50,7 +47,7 @@ if action == 'live':
         websocket.enableTrace(False)
         ws = websocket.WebSocketApp("wss://ws.finnhub.io?token=c5resoqad3ifnpn51ou0",
             on_message = on_message,
-            # on_error = on_error,
+            on_error = on_error,
             on_close = on_close)
         ws.on_open = on_open
         ws.run_forever()
