@@ -111,7 +111,7 @@ if action == 'graph':
     else:
         color = 'red'    
     plt.plot(x,bspl_y, color)
-    #plt.plot(x, y, 'orange')  
+    plt.plot(x, y, 'orange', alpha=0.2)  
 
     # Colorcode the tick tabs and prevent scientific notation (bad)
     plt.ticklabel_format(useOffset=False)
