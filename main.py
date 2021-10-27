@@ -65,7 +65,7 @@ if action == 'live':
         ws.on_open = on_open
         ws.run_forever()
 if action == 'graph':
-    t_end = time.time() + 2 * 60
+    t_end = time.time() + 2 * 10
     while time.time() < t_end:
         # do whatever you do
 
@@ -101,9 +101,9 @@ if action == 'graph':
             ws.run_forever()
     print('plotting now')
     plt.figure()
-    bspl = splrep(x,y,4)
+    bspl = splrep(x,y,s=len(y)/30)
     bspl_y = splev(x,bspl)
-    #plt.plot(x,y)
+    plt.plot(x,y)
     plt.plot(x,bspl_y)  
 
     # Define the matrix of 1x1 to place subplots
@@ -126,6 +126,6 @@ if action == 'graph':
     # Show the plot/image
     plt.tight_layout()
     plt.grid(alpha=0.8)
-    plt.savefig("example6.png")
+    plt.savefig("yeah it works.png")
     plt.show()
     print('done!')   
