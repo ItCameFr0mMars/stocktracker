@@ -75,8 +75,8 @@ if action == 'graph':
             for i in range(int(len(message['data']))):
                 y.append(message['data'][i]['p'])
                 x.append(time.time())
-                #print('appened '+str(i+1))
-            print(round(t_end - time.time()))      
+            print('Time remaining until graph can be created '+str(round(t_end - time.time())))
+            print('Number of price datapoints '+str(len(y)))      
                  
 
         def on_error(ws, error):
@@ -101,31 +101,28 @@ if action == 'graph':
             ws.run_forever()
     print('plotting now')
     plt.figure()
-    bspl = splrep(x,y,s=len(y)/30)
+    bspl = splrep(x,y,s=len(y)/55)
     bspl_y = splev(x,bspl)
-    plt.plot(x,y)
-    plt.plot(x,bspl_y)  
+    #plt.plot(x,y)
+    if y[0] < y[len(y)-1]:
+        color = 'green'
+    else:
+        color = 'red'    
+    plt.plot(x,bspl_y, color)  
 
-    # Define the matrix of 1x1 to place subplots
-    # Placing the plot1 on 1x1 matrix, at pos 1
-    #sp1.plot(x, y, 'red', linewidth=2)
-    #plt.plot(xnew, power_smooth)
-    #plt.plot(x, y)
-
-    # Colorcode the tick tabs 
-    plt.tick_params(axis='x', colors='red')
-    plt.tick_params(axis='y', colors='red')
-
-    # Colorcode the spine of the graph
+    # Colorcode the tick tabs and prevent scientific notation (bad)
+    plt.ticklabel_format(useOffset=False)
+    plt.tick_params(axis='x', colors=color)
+    plt.tick_params(axis='y', colors=color)
 
     # Put the title and labels
-    plt.title('graph of '+symbol, color='red')
-    plt.xlabel('time', color='red')
-    plt.ylabel('price ($)', color='red')
+    plt.title('Graph of '+symbol, color=color)
+    plt.xlabel('time', color=color)
+    plt.ylabel('price ($)', color=color)
 
     # Show the plot/image
     plt.tight_layout()
     plt.grid(alpha=0.8)
     plt.savefig("yeah it works.png")
     plt.show()
-    print('done!')   
+    print('done!')
