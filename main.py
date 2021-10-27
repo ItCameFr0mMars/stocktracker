@@ -5,8 +5,7 @@ from termcolor import colored
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-from scipy.interpolate import make_interp_spline, BSpline
-from scipy.interpolate import interp1d
+from scipy import interpolate
 prevprice = 0
 def roundfun(number):
     number = round(float(number), 2)
@@ -88,7 +87,7 @@ if action == 'graph':
             ws.send('{"type":"subscribe","symbol":"'+symbol+'"}')
 
         if __name__ == "__main__":
-            websocket.enableTrace(True)
+            websocket.enableTrace(False)
             ws = websocket.WebSocketApp("wss://ws.finnhub.io?token=c5resoqad3ifnpn51ou0",
                 on_message = on_message,
                 on_error = on_error,
@@ -96,11 +95,14 @@ if action == 'graph':
             ws.on_open = on_open
             ws.run_forever()
     print('plotting now')
-    x_sm = np.array(x)
-    y_sm = np.array(y)
+    canvas = plt.figure()
+    rect = canvas.patch
+    rect.set_facecolor('white')    
+    x_sm = np.asarray(x)
+    y_sm = np.asarray(y)
 
     x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
-    y_smooth = spline(x, y, x_smooth)
+    y_smooth = interpolate.make_interp_spline(x, y, x_smooth, bc_type=None, axis=0, check_finite=True)
 
     # Define the matrix of 1x1 to place subplots
     # Placing the plot1 on 1x1 matrix, at pos 1
