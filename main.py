@@ -5,7 +5,9 @@ from termcolor import colored
 import matplotlib.pyplot as plt
 import time
 import numpy as np
-from scipy import interpolate
+from scipy.interpolate import splrep, splev
+x = []
+y = []
 prevprice = 0
 def roundfun(number):
     number = round(float(number), 2)
@@ -63,19 +65,19 @@ if action == 'live':
         ws.on_open = on_open
         ws.run_forever()
 if action == 'graph':
-    x = []
-    y = []
-    t_end = time.time() + 10
+    t_end = time.time() + 2 * 60
     while time.time() < t_end:
         # do whatever you do
+
         def on_message(ws, message):
             message = eval(message)
             global prevprice
             for i in range(int(len(message['data']))):
                 y.append(message['data'][i]['p'])
                 x.append(time.time())
-                print('appened '+str(i+1))
-                
+                #print('appened '+str(i+1))
+            print(round(t_end - time.time()))      
+                 
 
         def on_error(ws, error):
             print(error)
@@ -86,48 +88,44 @@ if action == 'graph':
         def on_open(ws):
             ws.send('{"type":"subscribe","symbol":"'+symbol+'"}')
 
+
         if __name__ == "__main__":
             websocket.enableTrace(False)
             ws = websocket.WebSocketApp("wss://ws.finnhub.io?token=c5resoqad3ifnpn51ou0",
                 on_message = on_message,
                 on_error = on_error,
-                on_close = on_close)
+                on_close = on_close
+            )
+                
             ws.on_open = on_open
             ws.run_forever()
     print('plotting now')
-    canvas = plt.figure()
-    rect = canvas.patch
-    rect.set_facecolor('white')    
-    x_sm = np.asarray(x)
-    y_sm = np.asarray(y)
-
-    x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
-    y_smooth = interpolate.make_interp_spline(x, y, x_smooth, bc_type=None, axis=0, check_finite=True)
+    plt.figure()
+    bspl = splrep(x,y,4)
+    bspl_y = splev(x,bspl)
+    #plt.plot(x,y)
+    plt.plot(x,bspl_y)  
 
     # Define the matrix of 1x1 to place subplots
     # Placing the plot1 on 1x1 matrix, at pos 1
-    sp1 = canvas.add_subplot(1,1,1, axisbg='w')
     #sp1.plot(x, y, 'red', linewidth=2)
-    sp1.plot(x_smooth, y_smooth, 'red', linewidth=1)
+    #plt.plot(xnew, power_smooth)
+    #plt.plot(x, y)
 
     # Colorcode the tick tabs 
-    sp1.tick_params(axis='x', colors='red')
-    sp1.tick_params(axis='y', colors='red')
+    plt.tick_params(axis='x', colors='red')
+    plt.tick_params(axis='y', colors='red')
 
     # Colorcode the spine of the graph
-    sp1.spines['bottom'].set_color('r')
-    sp1.spines['top'].set_color('r')
-    sp1.spines['left'].set_color('r')
-    sp1.spines['right'].set_color('r')
 
     # Put the title and labels
-    sp1.set_title('matplotlib example 1', color='red')
-    sp1.set_xlabel('matplot x label', color='red')
-    sp1.set_ylabel('matplot y label', color='red')
+    plt.title('graph of '+symbol, color='red')
+    plt.xlabel('time', color='red')
+    plt.ylabel('price ($)', color='red')
 
     # Show the plot/image
     plt.tight_layout()
     plt.grid(alpha=0.8)
-    plt.savefig("example6.eps")
+    plt.savefig("example6.png")
     plt.show()
     print('done!')   
