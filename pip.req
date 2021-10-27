@@ -1,0 +1,7 @@
+requests
+websocket-client
+datetime 
+termcolor
+matplotlib
+scipy
+numpy
