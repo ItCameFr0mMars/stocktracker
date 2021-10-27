@@ -66,7 +66,7 @@ if action == 'live':
         ws.on_open = on_open
         ws.run_forever()
 if action == 'graph':
-    t_end = time.time() + 2 * 10
+    t_end = time.time() + 0
     while time.time() < t_end:
         # do whatever you do
 

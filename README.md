@@ -6,7 +6,4 @@ run with
 ```python main.py```
 #
 #
-#
-#
-#
 ![Example of graph](https://cdn.upload.systems/uploads/ro59iNup.png)
