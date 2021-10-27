@@ -78,8 +78,7 @@ if action == 'graph':
                 x.append(time.time())
             print('Time remaining until graph can be created '+str(round(t_end - time.time())))
             print('Number of price datapoints '+str(len(y)))     
-            print('Smoothness factor '+str(round(len(y)/20))) 
-            smoothness = len(y)/20
+            print('Smoothness factor '+str(round(len(y)/100)+3)) 
                  
 
         def on_error(ws, error):
@@ -104,14 +103,15 @@ if action == 'graph':
             ws.run_forever()
     print('plotting now')
     plt.figure()
-    bspl = splrep(x,y,s=len(y)/20)
+    bspl = splrep(x,y,s=(len(y)/100)+3)
     bspl_y = splev(x,bspl)
     #plt.plot(x,y)
     if y[0] < y[len(y)-1]:
         color = 'green'
     else:
         color = 'red'    
-    plt.plot(x,bspl_y, color)  
+    plt.plot(x,bspl_y, color)
+    #plt.plot(x, y, 'orange')  
 
     # Colorcode the tick tabs and prevent scientific notation (bad)
     plt.ticklabel_format(useOffset=False)
