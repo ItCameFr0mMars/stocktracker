@@ -88,7 +88,7 @@ if action == 'graph':
             ws.send('{"type":"subscribe","symbol":"'+symbol+'"}')
 
         if __name__ == "__main__":
-            websocket.enableTrace(False)
+            websocket.enableTrace(True)
             ws = websocket.WebSocketApp("wss://ws.finnhub.io?token=c5resoqad3ifnpn51ou0",
                 on_message = on_message,
                 on_error = on_error,
@@ -96,14 +96,36 @@ if action == 'graph':
             ws.on_open = on_open
             ws.run_forever()
     print('plotting now')
-    x=np.array(x)
-    y=np.array(y)
-    cubic_interploation_model = interp1d(x, y, kind = "cubic")
-    X_ = np.linspace(x.min(), x.max(), 500)
-    Y_ = cubic_interpolation_model(X_)
-    plt.plot(X_, Y_)
-    plt.title('smooth')
-    plt.xlabel('x')
-    plt.ylabel('y')
-    plt.savefig('graph.png')
+    x_sm = np.array(x)
+    y_sm = np.array(y)
+
+    x_smooth = np.linspace(x_sm.min(), x_sm.max(), 200)
+    y_smooth = spline(x, y, x_smooth)
+
+    # Define the matrix of 1x1 to place subplots
+    # Placing the plot1 on 1x1 matrix, at pos 1
+    sp1 = canvas.add_subplot(1,1,1, axisbg='w')
+    #sp1.plot(x, y, 'red', linewidth=2)
+    sp1.plot(x_smooth, y_smooth, 'red', linewidth=1)
+
+    # Colorcode the tick tabs 
+    sp1.tick_params(axis='x', colors='red')
+    sp1.tick_params(axis='y', colors='red')
+
+    # Colorcode the spine of the graph
+    sp1.spines['bottom'].set_color('r')
+    sp1.spines['top'].set_color('r')
+    sp1.spines['left'].set_color('r')
+    sp1.spines['right'].set_color('r')
+
+    # Put the title and labels
+    sp1.set_title('matplotlib example 1', color='red')
+    sp1.set_xlabel('matplot x label', color='red')
+    sp1.set_ylabel('matplot y label', color='red')
+
+    # Show the plot/image
+    plt.tight_layout()
+    plt.grid(alpha=0.8)
+    plt.savefig("example6.eps")
+    plt.show()
     print('done!')   
