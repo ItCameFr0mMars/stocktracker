@@ -8,6 +8,7 @@ import numpy as np
 from scipy.interpolate import splrep, splev
 x = []
 y = []
+smoothness = 0
 prevprice = 0
 def roundfun(number):
     number = round(float(number), 2)
@@ -76,7 +77,9 @@ if action == 'graph':
                 y.append(message['data'][i]['p'])
                 x.append(time.time())
             print('Time remaining until graph can be created '+str(round(t_end - time.time())))
-            print('Number of price datapoints '+str(len(y)))      
+            print('Number of price datapoints '+str(len(y)))     
+            print('Smoothness factor '+str(round(len(y)/20))) 
+            smoothness = len(y)/20
                  
 
         def on_error(ws, error):
@@ -101,7 +104,7 @@ if action == 'graph':
             ws.run_forever()
     print('plotting now')
     plt.figure()
-    bspl = splrep(x,y,s=len(y)/55)
+    bspl = splrep(x,y,s=len(y)/20)
     bspl_y = splev(x,bspl)
     #plt.plot(x,y)
     if y[0] < y[len(y)-1]:
@@ -112,7 +115,7 @@ if action == 'graph':
 
     # Colorcode the tick tabs and prevent scientific notation (bad)
     plt.ticklabel_format(useOffset=False)
-    plt.tick_params(axis='x', colors=color)
+    plt.tick_params(axis='x', colors='white')
     plt.tick_params(axis='y', colors=color)
 
     # Put the title and labels
