@@ -20,7 +20,7 @@ if action == 'help':
     Type \"info\" for current price and high + low
     Type \"live\" for live updates
     Type \"help\" for help (duh)
-    Type \"graph\" to make a graph of prices for 1 minute
+    Type \"graph\" to make a graph of prices (with sexy live data updates)
     Made by ItCameFr0mMars
     ''')
 if action == 'info':
@@ -96,7 +96,7 @@ if action == 'graph':
             plt.tight_layout()
             plt.grid(alpha=0.8)
             plt.savefig("yeah it works.png")
-            plt.pause(0.5)
+            plt.pause(1)
             plt.clf()
             print('done!')            
         def on_message(ws, message):
