@@ -69,7 +69,36 @@ if action == 'graph':
     t_end = time.time() + 1
     while time.time() < t_end:
         # do whatever you do
+        def livegraph(x,y):
+            print('plotting now')
+            plt.figure()
+            bspl = splrep(x,y,s=(len(y)/120)+3)
+            bspl_y = splev(x,bspl)
+            #plt.plot(x,y)
+            if y[0] < y[len(y)-1]:
+                color = 'green'
+            else:
+                color = 'red'    
+            plt.plot(x,bspl_y, color)
+            plt.plot(x, y, 'orange', alpha=0.2)  
 
+            # Colorcode the tick tabs and prevent scientific notation (bad)
+            plt.ticklabel_format(useOffset=False)
+            plt.tick_params(axis='x', colors='white')
+            plt.tick_params(axis='y', colors=color)
+
+            # Put the title and labels
+            plt.title('Graph of '+symbol, color=color)
+            plt.xlabel('time', color=color)
+            plt.ylabel('price ($)', color=color)
+
+            # Show the plot/image
+            plt.tight_layout()
+            plt.grid(alpha=0.8)
+            plt.savefig("yeah it works.png")
+            plt.pause(1)
+            plt.clf()
+            print('done!')            
         def on_message(ws, message):
             message = eval(message)
             global prevprice
@@ -78,7 +107,8 @@ if action == 'graph':
                 x.append(time.time())
             print('Time remaining until graph can be created '+str(round(t_end - time.time())))
             print('Number of price datapoints '+str(len(y)))     
-            print('Smoothness factor '+str(round(len(y)/120)+3)) 
+            print('Smoothness factor '+str(round(len(y)/120)+3))
+            livegraph(x, y) 
                  
 
         def on_error(ws, error):
@@ -101,31 +131,3 @@ if action == 'graph':
                 
             ws.on_open = on_open
             ws.run_forever()
-    print('plotting now')
-    plt.figure()
-    bspl = splrep(x,y,s=(len(y)/120)+3)
-    bspl_y = splev(x,bspl)
-    #plt.plot(x,y)
-    if y[0] < y[len(y)-1]:
-        color = 'green'
-    else:
-        color = 'red'    
-    plt.plot(x,bspl_y, color)
-    plt.plot(x, y, 'orange', alpha=0.2)  
-
-    # Colorcode the tick tabs and prevent scientific notation (bad)
-    plt.ticklabel_format(useOffset=False)
-    plt.tick_params(axis='x', colors='white')
-    plt.tick_params(axis='y', colors=color)
-
-    # Put the title and labels
-    plt.title('Graph of '+symbol, color=color)
-    plt.xlabel('time', color=color)
-    plt.ylabel('price ($)', color=color)
-
-    # Show the plot/image
-    plt.tight_layout()
-    plt.grid(alpha=0.8)
-    plt.savefig("yeah it works.png")
-    plt.show()
-    print('done!')
