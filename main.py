@@ -72,7 +72,7 @@ if action == 'graph':
         def livegraph(x,y):
             print('plotting now')
             plt.figure()
-            bspl = splrep(x,y,s=(len(y)/120)+3)
+            bspl = splrep(x,y,s=(len(y)/80)+3)
             bspl_y = splev(x,bspl)
             #plt.plot(x,y)
             if y[0] < y[len(y)-1]:
@@ -96,18 +96,18 @@ if action == 'graph':
             plt.tight_layout()
             plt.grid(alpha=0.8)
             plt.savefig("yeah it works.png")
-            plt.pause(1)
+            plt.pause(0.5)
             plt.clf()
             print('done!')            
         def on_message(ws, message):
             message = eval(message)
             global prevprice
-            for i in range(int(len(message['data']))):
+            for i in range(0, 5):
                 y.append(message['data'][i]['p'])
                 x.append(time.time())
             print('Time remaining until graph can be created '+str(round(t_end - time.time())))
             print('Number of price datapoints '+str(len(y)))     
-            print('Smoothness factor '+str(round(len(y)/120)+3))
+            print('Smoothness factor '+str(round(len(y)/80)+3))
             livegraph(x, y) 
                  
 
