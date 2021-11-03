@@ -71,7 +71,7 @@ if action == 'graph':
         # do whatever you do
         def livegraph(x,y):
             print('plotting now')
-            plt.figure(dpi=300)
+            plt.figure(dpi=175)
             bspl = splrep(x,y,s=1)
             bspl_y = splev(x,bspl)
             #plt.plot(x,y)
