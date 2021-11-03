@@ -72,7 +72,7 @@ if action == 'graph':
         def livegraph(x,y):
             print('plotting now')
             plt.figure()
-            bspl = splrep(x,y,s=(len(y)/80)+3)
+            bspl = splrep(x,y,s=1)
             bspl_y = splev(x,bspl)
             #plt.plot(x,y)
             if y[0] < y[len(y)-1]:
@@ -107,7 +107,7 @@ if action == 'graph':
                 x.append(time.time())
             print('Time remaining until graph can be created '+str(round(t_end - time.time())))
             print('Number of price datapoints '+str(len(y)))     
-            print('Smoothness factor '+str(round(len(y)/80)+3))
+            print('Smoothness factor '+str(1))
             livegraph(x, y) 
                  
 
