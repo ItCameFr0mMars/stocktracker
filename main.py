@@ -95,7 +95,8 @@ if action == 'graph':
             # Show the plot/image
             plt.tight_layout()
             plt.grid(alpha=0.8)
-            plt.savefig("yeah it works.png")
+            plt.savefig("graph.png")
+            plt.show()
             plt.pause(1)
             plt.clf()
             print('done!')            
